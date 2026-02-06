@@ -17,7 +17,7 @@
     </header>
 
     <div class="storage-stats">
-      <p>Storage Used: <strong><%= stats.usedMB %> MB</strong></p>
+      <p>Storage Used: <strong><%= storageInfo.available ? storageInfo.usedGB + ' GB' : 'N/A' %></strong> of <strong><%= storageInfo.available ? storageInfo.totalGB + ' GB' : 'N/A' %></strong></p>
     </div>
 
     <div class="upload-section">

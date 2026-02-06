@@ -190,9 +190,9 @@
               <span class="stat-label">Storage Used</span>
               <span class="stat-icon">💾</span>
             </div>
-            <div class="stat-value"><%= stats.usedMB %> MB</div>
+            <div class="stat-value"><%= storageInfo.available ? storageInfo.usedGB + ' GB' : '0 MB' %></div>
             <div class="stat-footer">
-              <span class="stat-change">of unlimited</span>
+              <span class="stat-change">of <%= storageInfo.available ? storageInfo.totalGB + ' GB' : 'unlimited' %></span>
             </div>
           </div>
 
