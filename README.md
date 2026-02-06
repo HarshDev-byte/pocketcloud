@@ -194,6 +194,8 @@ pocketcloud/
 
 ## Quick Start
 
+## Quick Start
+
 **For Raspberry Pi OS 64-bit (February 2026):**
 
 ### 🎯 New User (Recommended)
@@ -217,9 +219,56 @@ bash tools/system-status.sh             # 4. Verify installation
 
 **Access**: http://localhost:3000
 
+### 🚨 Common Issues & Quick Fixes
+
+#### "FATAL: External USB storage not available"
+```bash
+# Check if USB drive is connected
+lsblk
+
+# If drive shows but not mounted at /mnt/pocketcloud:
+sudo bash setup/setup-usb-storage.sh
+
+# If drive is mounted elsewhere (like /media/):
+sudo umount /media/*/  # Unmount from current location
+sudo bash setup/setup-usb-storage.sh
+```
+
+#### "stats is not defined" or Template Errors
+```bash
+# Update to latest version
+git pull origin master
+npm start
+```
+
+#### "Device is busy" During USB Setup
+```bash
+# Unmount the drive first
+sudo umount /dev/sda1  # Replace sda1 with your device
+sudo umount /media/*/  # Or unmount from /media/
+sudo bash setup/setup-usb-storage.sh
+```
+
+#### Can't Access from Phone/Laptop
+```bash
+# Find Pi's IP address
+hostname -I
+
+# Access from other devices: http://[PI_IP]:3000
+# Example: http://192.168.1.100:3000
+
+# If still can't access, check firewall:
+sudo ufw allow 3000
+```
+
+#### USB Drive Disconnects
+- **New in latest version**: Shows friendly "Storage Disconnected" page
+- **Auto-reconnection**: Page detects when USB is reconnected
+- **No server restart needed**: Just reconnect USB and refresh
+
 ### 📚 Documentation (Read First!)
 
-- **[Complete Setup Guide 2026](docs/COMPLETE_SETUP_GUIDE_2026.md)** - Ultra-detailed instructions
+- **[Complete Setup Guide 2026](docs/COMPLETE_SETUP_GUIDE_2026.md)** - Ultra-detailed instructions with troubleshooting
 - **[Pre-Setup Checklist](docs/PRE_SETUP_CHECKLIST.md)** - What to buy and prepare (printable)
 - **[Visual Setup Guide](docs/VISUAL_SETUP_GUIDE.md)** - ASCII diagrams and visual instructions
 - **[Troubleshooting 2026](docs/TROUBLESHOOTING_2026.md)** - Common problems and solutions
@@ -229,6 +278,7 @@ bash tools/system-status.sh             # 4. Verify installation
 - **System status**: `bash tools/system-status.sh`
 - **Create backup**: `sudo bash tools/backup-pocketcloud.sh`
 - **Interactive help**: `bash setup.sh --docs`
+- **Update PocketCloud**: `git pull origin master`
 
 **TL;DR for experienced users:**
 ```bash

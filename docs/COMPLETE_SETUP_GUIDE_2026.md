@@ -356,29 +356,306 @@ As of February 2026, here's what's current:
 
 ## 🆘 Troubleshooting
 
-### "Can't access PocketCloud from my phone"
+### Critical Issues (Server Won't Start)
+
+#### "FATAL: External USB storage not available"
+**Symptoms:** Server starts but immediately fails with USB storage error
+```
+FATAL: External USB storage not available
+Reason: No USB drive mounted
+```
+
+**Solutions:**
+1. **Check if USB drive is connected:**
+   ```bash
+   lsblk
+   ```
+   Look for your USB drive (usually `sda`, `sdb`, etc.)
+
+2. **If USB drive shows but not mounted:**
+   ```bash
+   sudo bash setup/setup-usb-storage.sh
+   ```
+
+3. **If USB drive is mounted elsewhere (like `/media/`):**
+   ```bash
+   # Unmount from current location
+   sudo umount /media/siesgst/New\ Volume
+   # Or find the exact mount point:
+   df -h | grep sda
+   sudo umount /dev/sda1
+   
+   # Run setup script
+   sudo bash setup/setup-usb-storage.sh
+   ```
+
+4. **Manual USB setup if script fails:**
+   ```bash
+   # Create mount point
+   sudo mkdir -p /mnt/pocketcloud
+   
+   # Format drive (DESTROYS DATA!)
+   sudo mkfs.ext4 /dev/sda1
+   
+   # Mount it
+   sudo mount /dev/sda1 /mnt/pocketcloud
+   
+   # Set permissions
+   sudo chown $USER:$USER /mnt/pocketcloud
+   
+   # Add to auto-mount
+   echo "/dev/sda1 /mnt/pocketcloud ext4 defaults 0 2" | sudo tee -a /etc/fstab
+   ```
+
+#### "stats is not defined" Error
+**Symptoms:** Dashboard loads but shows template errors
+```
+stats is not defined
+Server error: /views/dashboard.ejs:193
+```
+
+**Solution:**
+```bash
+# Update to latest version
+cd ~/Desktop/Pocketcloud
+git pull origin master
+npm start
+```
+
+#### "getSystemIdentity is not a function"
+**Symptoms:** Security page crashes
+```
+TypeError: getSystemIdentity is not a function
+```
+
+**Solution:**
+```bash
+# Update to latest version with fixes
+cd ~/Desktop/Pocketcloud
+git pull origin master
+npm start
+```
+
+### USB Drive Issues
+
+#### "Device is busy" During Setup
+**Symptoms:** Setup script fails with "Partition(s) on /dev/sda are being used"
+
+**Solution:**
+```bash
+# Check what's using the drive
+sudo lsof /dev/sda1
+
+# Unmount all partitions
+sudo umount /dev/sda1
+sudo umount /dev/sda2
+# Or unmount by mount point
+sudo umount /media/siesgst/New\ Volume
+
+# Run setup again
+sudo bash setup/setup-usb-storage.sh
+```
+
+#### USB Drive Disconnects During Use
+**Symptoms:** I/O errors, "Storage failure detected"
+```
+Dashboard error: EIO: i/o error, mkdir '/mnt/pocketcloud/user_1'
+Storage failure detected: USB drive disconnected
+```
+
+**What happens now:** PocketCloud shows a friendly "Storage Disconnected" page instead of crashing
+
+**Solutions:**
+1. **Reconnect USB drive** - Page will auto-detect and redirect
+2. **Check USB connection** - Ensure cable is secure
+3. **Check power supply** - Weak power can cause disconnections
+4. **Use powered USB hub** - For high-power drives
+
+#### "Mount point not writable"
+**Symptoms:** USB mounted but permission errors
+```
+FATAL: External USB storage not available
+Reason: Mount point not writable
+```
+
+**Solution:**
+```bash
+# Fix permissions
+sudo chown -R $USER:$USER /mnt/pocketcloud
+sudo chmod 755 /mnt/pocketcloud
+
+# Test write access
+touch /mnt/pocketcloud/test-file
+rm /mnt/pocketcloud/test-file
+```
+
+### Network Access Issues
+
+#### "Can't access PocketCloud from my phone"
 1. **Check if Pi and phone are on same Wi-Fi network**
-2. **Try the Pi's IP address:** `http://192.168.1.XXX:3000`
-3. **Check firewall:** `sudo ufw status` (should show port 3000 allowed)
+2. **Find Pi's IP address:**
+   ```bash
+   hostname -I
+   ```
+3. **Try the Pi's IP address:** `http://192.168.1.XXX:3000`
+4. **Check firewall:**
+   ```bash
+   sudo ufw status
+   # If needed:
+   sudo ufw allow 3000
+   ```
 
-### "PocketCloud won't start"
-1. **Check service status:** `sudo systemctl status pocketcloud`
-2. **Check logs:** `sudo journalctl -u pocketcloud -n 20`
-3. **Restart service:** `sudo systemctl restart pocketcloud`
+### Service Issues
 
-### "USB drive not working"
-1. **Check if mounted:** `df -h | grep pocketcloud`
-2. **Re-run USB setup:** `sudo bash setup/setup-usb-storage.sh`
+#### "PocketCloud won't start"
+1. **Check service status:**
+   ```bash
+   sudo systemctl status pocketcloud
+   ```
 
-### "Forgot my password"
+2. **Check detailed logs:**
+   ```bash
+   sudo journalctl -u pocketcloud -n 50
+   ```
+
+3. **Common fixes:**
+   ```bash
+   # Restart service
+   sudo systemctl restart pocketcloud
+   
+   # If service doesn't exist, install it:
+   sudo bash setup/install.sh
+   ```
+
+#### "Port 3000 already in use"
+**Solution:**
+```bash
+# Find what's using port 3000
+sudo netstat -tlnp | grep 3000
+
+# Kill the process or use different port
+PORT=8080 npm start
+```
+
+### Git/Update Issues
+
+#### "Git pull fails" or "Repository not found"
+**Solution:**
+```bash
+# Check remote URL
+git remote -v
+
+# Fix remote URL if needed
+git remote set-url origin https://github.com/HarshDev-byte/Pocketcloud.git
+
+# Pull updates
+git pull origin master
+```
+
+### Data Issues
+
+#### "Forgot my password"
 1. **⚠️ There's no password recovery** (by design for security)
 2. **You'll need to create a new account**
 3. **Your old files will remain encrypted and inaccessible**
 
-### "Pi won't boot"
+#### "Files won't upload"
+1. **Check disk space:**
+   ```bash
+   df -h | grep pocketcloud
+   ```
+2. **Check file size** (default limit: 1GB)
+3. **Check file type** (only certain types allowed)
+
+### Hardware Issues
+
+#### "Pi won't boot"
 1. **Check power supply** (red LED should be solid)
 2. **Check SD card** (re-flash if necessary)
 3. **Try different HDMI cable/monitor**
+
+#### "USB drive not detected"
+1. **Try different USB port**
+2. **Check USB cable**
+3. **Try different USB drive**
+4. **Check power supply** (Pi needs enough power for USB devices)
+
+### Performance Issues
+
+#### "Slow file uploads/downloads"
+1. **Use USB 3.0 drive** (blue connector)
+2. **Connect to USB 3.0 port** (blue port on Pi 4)
+3. **Check network speed** for remote access
+4. **Use wired connection** instead of Wi-Fi when possible
+
+### Recovery Procedures
+
+#### "Complete reset" (if everything is broken)
+```bash
+# Stop service
+sudo systemctl stop pocketcloud
+
+# Remove installation
+sudo rm -rf /opt/pocketcloud
+sudo userdel pocketcloud
+
+# Re-run setup
+cd ~/Desktop/Pocketcloud
+sudo bash setup/install.sh
+```
+
+#### "USB drive corrupted"
+```bash
+# Check filesystem
+sudo fsck /dev/sda1
+
+# If corrupted, reformat (DESTROYS DATA!)
+sudo mkfs.ext4 /dev/sda1
+```
+
+### Getting Help
+
+#### Collect System Information
+```bash
+# System status
+bash tools/system-status.sh
+
+# Recent logs
+sudo journalctl -u pocketcloud -n 50
+
+# USB status
+lsblk
+df -h
+mount | grep pocketcloud
+
+# Network status
+hostname -I
+sudo netstat -tlnp | grep 3000
+```
+
+#### Common Command Reference
+```bash
+# Start PocketCloud
+npm start
+
+# Check if running
+sudo systemctl status pocketcloud
+
+# View logs
+sudo journalctl -u pocketcloud -f
+
+# Restart service
+sudo systemctl restart pocketcloud
+
+# Check USB mount
+df -h | grep pocketcloud
+
+# Update PocketCloud
+git pull origin master
+
+# Re-setup USB
+sudo bash setup/setup-usb-storage.sh
+```
 
 ---
 

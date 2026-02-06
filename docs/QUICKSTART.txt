@@ -117,18 +117,41 @@ TROUBLESHOOTING
 Can't access from network?
 - Check firewall: sudo ufw allow 3000
 - Check service: sudo systemctl status pocketcloud
+- Find Pi IP: hostname -I
+- Use: http://[PI-IP]:3000
 
 Service won't start?
 - Check logs: sudo journalctl -u pocketcloud -n 50
 - Check port: sudo netstat -tlnp | grep 3000
 
+USB storage not available?
+- Check connection: lsblk
+- Unmount if mounted elsewhere: sudo umount /media/*/
+- Run setup: sudo bash setup/setup-usb-storage.sh
+
 Upload fails?
 - Check disk space: df -h
 - Check file size (default limit: 1GB)
 
+Template errors (stats not defined)?
+- Update: git pull origin master && npm start
+
+Device busy during USB setup?
+- Unmount first: sudo umount /dev/sda1
+- Close file managers
+- Run setup again: sudo bash setup/setup-usb-storage.sh
+
+USB disconnects during use?
+- New: Shows friendly "Storage Disconnected" page
+- Auto-reconnects when USB plugged back in
+- Use quality USB cable and adequate power supply
+
 Forgot password?
 - No recovery yet - you'll need to create new account
 - Your files are encrypted with your password
+
+Git pull fails?
+- Fix remote: git remote set-url origin https://github.com/HarshDev-byte/Pocketcloud.git
 
 
 NEXT STEPS
