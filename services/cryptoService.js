@@ -304,6 +304,12 @@ async function decryptFileStream(inputPath, outputStream, password, userSalt, fi
   
   // Step 6: Handle auth failures gracefully
   decipher.on('error', (error) => {
+    console.error(`🔓 Decryption failed for file: ${path.basename(inputPath)}`);
+    console.error(`   Error: ${error.message}`);
+    console.error(`   File ID: ${fileId}`);
+    console.error(`   IV length: ${iv ? iv.length : 'undefined'}`);
+    console.error(`   AuthTag length: ${authTag ? authTag.length : 'undefined'}`);
+    
     // GCM auth failure - file tampered or corrupted
     if (error.message.includes('Unsupported state') || 
         error.message.includes('authenticate data')) {

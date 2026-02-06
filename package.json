@@ -10,7 +10,8 @@
     "test:streaming": "node scripts/test-streaming.js",
     "test:failures": "node scripts/test-failure-scenarios.js",
     "validate": "node scripts/validate-boundaries.js",
-    "migrate:encryption": "node scripts/migrate-encryption.js"
+    "migrate:encryption": "node scripts/migrate-encryption.js",
+    "check:integrity": "node scripts/check-file-integrity.js"
   },
   "keywords": [
     "personal-cloud",

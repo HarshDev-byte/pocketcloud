@@ -6,7 +6,7 @@
 const express = require('express');
 const { requireAuth } = require('../middleware/auth');
 const { getSupportStatement, getUpgradeSafety, detectEnvironment, validateEnvironment } = require('../services/productBoundaries');
-const { getSystemIdentity } = require('../services/identityService');
+const { getIdentity } = require('../services/identityService');
 
 const router = express.Router();
 
@@ -23,7 +23,7 @@ router.get('/', async (req, res) => {
       getUpgradeSafety(),
       detectEnvironment(),
       validateEnvironment(),
-      getSystemIdentity()
+      getIdentity()
     ]);
     
     res.render('support', {
