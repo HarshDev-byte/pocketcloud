@@ -2,18 +2,21 @@
   "name": "pocketcloud",
   "version": "1.0.0",
   "description": "PocketCloud encrypts your files automatically on external USB storage with zero cloud dependencies",
-  "main": "server.js",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "scripts": {
-    "start": "node server.js",
-    "status": "node scripts/status.js",
-    "test:crypto": "node scripts/test-encryption.js",
-    "test:streaming": "node scripts/test-streaming.js",
-    "test:failures": "node scripts/test-failure-scenarios.js",
-    "validate": "node scripts/validate-boundaries.js",
-    "migrate:encryption": "node scripts/migrate-encryption.js",
-    "check:integrity": "node scripts/check-file-integrity.js",
-    "scan:corruption": "node scripts/scan-corruption.js",
-    "cleanup:corrupted": "node scripts/scan-corruption.js cleanup"
+    "start": "npm run start --workspace=backend",
+    "start:backend": "npm run start --workspace=backend",
+    "start:frontend": "npm run dev --workspace=frontend",
+    "build": "npm run build --workspace=frontend",
+    "test": "npm run test --workspace=backend",
+    "install:all": "npm install && npm install --workspace=backend && npm install --workspace=frontend",
+    "status": "npm run status --workspace=backend",
+    "setup": "bash setup.sh",
+    "health": "bash tools/check-pocketcloud.sh"
   },
   "keywords": [
     "personal-cloud",

@@ -16,7 +16,7 @@ const app = express();
 // Middleware - Basic setup only
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Session configuration
 app.use(session({

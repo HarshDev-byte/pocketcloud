@@ -1,227 +1,265 @@
-# PocketCloud Project Structure
+# 📁 PocketCloud Project Structure
 
-This document describes the organized file structure of PocketCloud, designed for clarity and maintainability.
+## Overview
+PocketCloud is now organized as a modern monorepo with clear separation of concerns and professional structure.
 
-## Root Directory
+## Root Directory Structure
 
 ```
 pocketcloud/
-├── setup.sh                    # Main setup launcher (interactive)
-├── server.js                   # Main application server
-├── package.json                # Node.js dependencies and scripts
 ├── README.md                   # Main project documentation
-└── .env.example                # Environment configuration template
+├── package.json               # Workspace manager
+├── .env.example               # Environment template
+├── .gitignore                 # Git ignore rules
+├── setup.sh                   # Main setup script
+│
+├── backend/                   # Backend Node.js application
+├── frontend/                  # React frontend application  
+├── setup/                     # Installation scripts
+├── tools/                     # System management tools
+├── docs/                      # Documentation
+├── system/                    # System configuration
+├── config/                    # Application configuration
+├── data/                      # Runtime data (symlinked to USB)
+├── storage/                   # File storage (symlinked to USB)
+└── backups/                   # Backup files
 ```
 
-**Key Files:**
-- **`setup.sh`** - Interactive setup script that guides users through complete installation
-- **`server.js`** - Main Node.js application entry point
-- **`README.md`** - Primary documentation with quick start instructions
+## Backend Structure (`backend/`)
 
-## Directory Structure
+```
+backend/
+├── package.json              # Backend dependencies
+├── server.js                 # Application entry point
+├── README.md                 # Backend documentation
+│
+├── src/                      # Source code
+│   ├── config/              # Configuration files
+│   │   ├── config.js        # Main configuration
+│   │   ├── database.js      # Database setup
+│   │   ├── storage.js       # Storage configuration
+│   │   └── roles.js         # User roles
+│   │
+│   ├── middleware/          # Express middleware
+│   │   ├── auth.js          # Authentication
+│   │   ├── rateLimiter.js   # Rate limiting
+│   │   ├── rbac.js          # Role-based access control
+│   │   ├── readiness.js     # Health checks
+│   │   ├── sessionDebug.js  # Session debugging
+│   │   ├── setup.js         # Setup flow
+│   │   ├── storageError.js  # Storage error handling
+│   │   └── validation.js    # Input validation
+│   │
+│   ├── routes/              # API routes
+│   │   ├── auth.js          # Authentication routes
+│   │   ├── files.js         # File management
+│   │   └── index.js         # Main routes
+│   │
+│   ├── services/            # Business logic (organized by domain)
+│   │   ├── core/           # Core services (13 files)
+│   │   │   ├── storageService.js
+│   │   │   ├── cryptoService.js
+│   │   │   ├── userService.js
+│   │   │   ├── backupService.js
+│   │   │   └── ...
+│   │   │
+│   │   ├── media/          # Media services (5 files)
+│   │   │   ├── videoStreamingService.js
+│   │   │   ├── photoGalleryService.js
+│   │   │   ├── musicPlayerService.js
+│   │   │   └── ...
+│   │   │
+│   │   ├── security/       # Security services (4 files)
+│   │   │   ├── twoFactorService.js
+│   │   │   ├── sessionService.js
+│   │   │   └── ...
+│   │   │
+│   │   ├── monitoring/     # Monitoring services (7 files)
+│   │   │   ├── healthCheckService.js
+│   │   │   ├── performanceMonitorService.js
+│   │   │   └── ...
+│   │   │
+│   │   └── automation/     # Automation services (7 files)
+│   │       ├── schedulerService.js
+│   │       ├── automationService.js
+│   │       └── ...
+│   │
+│   └── utils/              # Utility functions
+│       └── security.js     # Security utilities
+│
+├── scripts/                # Backend scripts (organized by purpose)
+│   ├── maintenance/        # Maintenance scripts (6 files)
+│   │   ├── startup-cleanup.js
+│   │   ├── migrate-encryption.js
+│   │   ├── check-file-integrity.js
+│   │   ├── scan-corruption.js
+│   │   ├── validate-boundaries.js
+│   │   └── status.js
+│   │
+│   └── testing/           # Testing scripts (3 files)
+│       ├── test-encryption.js
+│       ├── test-failure-scenarios.js
+│       └── test-streaming.js
+│
+├── tests/                 # Test suites
+│   ├── e2e/              # End-to-end tests
+│   ├── integration/      # Integration tests
+│   ├── unit/             # Unit tests
+│   └── setup.js          # Test setup
+│
+├── tools/                # Backend management tools
+│   ├── README.md         # Tools documentation
+│   ├── backup-pocketcloud.sh
+│   └── system-status.sh
+│
+├── public/               # Static web assets
+│   └── css/             # Stylesheets
+│
+└── views/               # EJS templates
+    ├── layout.ejs       # Base template
+    ├── dashboard.ejs    # Main dashboard
+    ├── login.ejs        # Login page
+    └── ...
+```
 
-### `/setup/` - Installation Scripts
+## Frontend Structure (`frontend/`)
+
+```
+frontend/
+├── package.json          # Frontend dependencies
+├── index.html           # HTML entry point
+├── README.md            # Frontend documentation
+│
+├── src/                 # React source code
+│   ├── components/      # React components
+│   ├── pages/          # Page components
+│   ├── hooks/          # Custom hooks
+│   ├── utils/          # Utilities
+│   ├── assets/         # Static assets
+│   └── App.tsx         # Main app component
+│
+└── node_modules/       # Dependencies
+```
+
+## Setup & Tools Structure
+
+### Setup Scripts (`setup/`)
 ```
 setup/
-├── README.md                   # Setup scripts documentation
-├── check-requirements.sh       # System requirements checker
-├── setup-usb-storage.sh       # USB drive setup automation
-└── install.sh                 # Complete PocketCloud installation
+├── setup-pocketcloud.sh    # Main setup script
+├── setup-usb-drive.sh      # USB drive setup
+├── monitor-usb-drive.sh    # USB monitoring
+└── refresh-github.sh       # GitHub refresh
 ```
 
-**Purpose:** Contains all scripts needed to install PocketCloud on Raspberry Pi OS.
-
-### `/tools/` - Management Utilities
+### Management Tools (`tools/`)
 ```
 tools/
-├── README.md                   # Tools documentation
-├── system-status.sh            # Health check and status monitoring
-└── backup-pocketcloud.sh       # Complete backup solution
+└── check-pocketcloud.sh    # Health check script
 ```
 
-**Purpose:** Post-installation management and maintenance tools.
+### System Configuration (`system/`)
+```
+system/
+└── systemd/
+    └── pocketcloud.service # systemd service file
+```
 
-### `/docs/` - Documentation
+## Documentation Structure (`docs/`)
+
 ```
 docs/
-├── QUICKSTART.txt              # Step-by-step setup guide
-└── RASPBERRY_PI_SETUP.md       # Comprehensive Pi setup documentation
+├── COMPLETE_SETUP_GUIDE_2026.md
+├── CROSS_DEVICE_ACCESS.md
+├── PRE_SETUP_CHECKLIST.md
+├── QUICKSTART.txt
+├── RASPBERRY_PI_SETUP.md
+├── TROUBLESHOOTING_2026.md
+├── VISUAL_SETUP_GUIDE.md
+│
+└── archive/             # Archived documentation
+    ├── PHASED_IMPLEMENTATION.md
+    ├── POCKETCLOUD_SETUP.md
+    ├── STRUCTURE_IMPROVEMENTS.md
+    └── ...
 ```
 
-**Purpose:** User-facing documentation and setup guides.
+## Key Features of New Structure
 
-### `/config/` - Configuration Files
-```
-config/
-├── config.js                   # Application configuration
-├── database.js                 # SQLite database setup
-├── storage.js                  # File storage configuration
-└── pocketcloud.service         # systemd service definition
-```
+### 1. **Monorepo with Workspaces**
+- Root `package.json` manages workspaces
+- Separate `package.json` for backend and frontend
+- Unified dependency management
 
-**Purpose:** Application configuration and system service files.
+### 2. **Clear Separation of Concerns**
+- **Backend**: All server-side code in `backend/`
+- **Frontend**: All client-side code in `frontend/`
+- **Setup**: Installation scripts in `setup/`
+- **Tools**: Management utilities in `tools/`
+- **Docs**: All documentation in `docs/`
 
-### `/routes/` - Web Routes
-```
-routes/
-├── index.js                    # Landing page routes
-├── auth.js                     # Authentication routes
-└── files.js                    # File management routes
-```
+### 3. **Domain-Driven Service Organization**
+- **Core**: Essential business logic
+- **Media**: Media processing services
+- **Security**: Authentication and security
+- **Monitoring**: Health and performance monitoring
+- **Automation**: Background tasks and automation
 
-**Purpose:** Express.js route handlers for web interface.
+### 4. **Professional Standards**
+- Follows industry best practices
+- Scalable architecture
+- Easy navigation and maintenance
+- Clear dependency management
 
-### `/views/` - Web Templates
-```
-views/
-├── layout.ejs                  # Base template
-├── landing.ejs                 # Home page
-├── login.ejs                   # Login page
-├── register.ejs                # Registration page
-├── dashboard.ejs               # Main dashboard
-├── files.ejs                   # File browser
-├── setup.ejs                   # First-time setup
-├── security.ejs                # Security settings
-├── support.ejs                 # Support page
-└── error.ejs                   # Error page
-```
+## Usage
 
-**Purpose:** EJS templates for the web interface.
+### Development
+```bash
+# Install all dependencies
+npm run install:all
 
-### `/middleware/` - Express Middleware
-```
-middleware/
-├── auth.js                     # Authentication middleware
-├── rateLimiter.js              # Rate limiting
-├── readiness.js                # Health check endpoints
-└── setup.js                    # Setup flow middleware
+# Start backend only
+npm run start:backend
+
+# Start frontend only  
+npm run start:frontend
+
+# Run tests
+npm test
+
+# Check system health
+npm run health
 ```
 
-**Purpose:** Express.js middleware for security, authentication, and request handling.
+### Production
+```bash
+# Setup system
+npm run setup
 
-### `/services/` - Business Logic
-```
-services/
-├── cryptoService.js            # File encryption/decryption
-├── cryptoErrors.js             # Encryption error handling
-├── storageService.js           # File storage operations
-├── backupService.js            # Backup operations
-├── restoreService.js           # Restore operations
-├── healthService.js            # System health monitoring
-├── identityService.js          # User identity management
-├── usbMountService.js          # USB storage management
-├── failureDetection.js         # System failure detection
-├── failureDrills.js            # Failure recovery testing
-├── setupVerification.js        # Setup validation
-└── productBoundaries.js        # Product scope enforcement
+# Start application
+npm start
+
+# Check status
+npm run status
 ```
 
-**Purpose:** Core business logic and service layer.
+## Migration from Old Structure
 
-### `/utils/` - Utility Functions
-```
-utils/
-└── security.js                # Security utilities and helpers
-```
+The old flat structure has been reorganized:
+- ✅ Duplicate directories moved to `_backup_root_duplicates/`
+- ✅ Services organized by domain in `backend/src/services/`
+- ✅ Scripts organized by purpose in `backend/scripts/`
+- ✅ Setup scripts moved to `setup/`
+- ✅ Documentation archived and organized
+- ✅ Workspace structure implemented
 
-**Purpose:** Shared utility functions and helpers.
+## Benefits
 
-### `/scripts/` - Maintenance Scripts
-```
-scripts/
-├── health-check.sh             # System health verification
-├── migrate-encryption.js       # Encryption migration
-├── setup-usb-storage.sh        # USB storage setup
-├── startup-cleanup.js          # Startup cleanup tasks
-├── status.js                   # Status reporting
-├── test-encryption.js          # Encryption testing
-├── test-failure-scenarios.js   # Failure scenario testing
-├── test-streaming.js           # Streaming functionality tests
-└── validate-boundaries.js      # Product boundary validation
-```
+1. **No More Confusion**: Clear separation eliminates duplicate directories
+2. **Professional Structure**: Follows industry standards for Node.js projects
+3. **Easy Navigation**: Logical organization makes finding files intuitive
+4. **Scalable**: Can easily add new services, components, or tools
+5. **Maintainable**: Clear patterns for where new code should go
+6. **Team-Ready**: Structure supports multiple developers working together
 
-**Purpose:** Maintenance, testing, and administrative scripts.
-
-### `/public/` - Static Assets
-```
-public/
-└── css/
-    ├── style.css               # Main stylesheet
-    ├── dashboard.css           # Dashboard-specific styles
-    ├── security.css            # Security page styles
-    └── support.css             # Support page styles
-```
-
-**Purpose:** Static web assets (CSS, images, client-side JavaScript).
-
-### Runtime Directories (Created During Installation)
-
-### `/data/` - Application Data
-```
-data/
-├── pocketcloud.db              # SQLite database
-└── .pocketcloud-identity       # System identity file
-```
-
-**Purpose:** Application database and configuration data.
-**Location:** Symlinked to `/mnt/pocketcloud/pocketcloud-data/` on USB storage.
-
-### `/storage/` - User Files
-```
-storage/
-├── user_1/                     # User-specific encrypted storage
-└── user_2/                     # Additional users
-```
-
-**Purpose:** Encrypted user file storage.
-**Location:** Symlinked to `/mnt/pocketcloud/pocketcloud-storage/` on USB storage.
-
-## Installation Flow
-
-1. **`setup.sh`** - Interactive launcher
-2. **`setup/check-requirements.sh`** - Verify system compatibility
-3. **`setup/setup-usb-storage.sh`** - Configure USB storage
-4. **`setup/install.sh`** - Install and configure PocketCloud
-5. **`tools/system-status.sh`** - Verify installation
-
-## Management Flow
-
-- **Monitor**: `tools/system-status.sh`
-- **Backup**: `tools/backup-pocketcloud.sh`
-- **Logs**: `sudo journalctl -u pocketcloud -f`
-- **Control**: `sudo systemctl {start|stop|restart} pocketcloud`
-
-## Key Design Principles
-
-### 1. **Separation of Concerns**
-- **Setup scripts** in `/setup/` for installation
-- **Management tools** in `/tools/` for maintenance
-- **Documentation** in `/docs/` for users
-- **Configuration** in `/config/` for system settings
-
-### 2. **User Experience**
-- **Single entry point**: `setup.sh` for complete installation
-- **Clear documentation**: Step-by-step guides in `/docs/`
-- **Helpful tools**: Status checking and backup utilities
-
-### 3. **Maintainability**
-- **Logical grouping**: Related files in appropriate directories
-- **Clear naming**: Descriptive file and directory names
-- **Documentation**: README files in each major directory
-
-### 4. **Production Ready**
-- **Clean root**: Only essential files in root directory
-- **Proper permissions**: Scripts and configuration files properly organized
-- **System integration**: Service files and system configuration properly placed
-
-## File Permissions
-
-After installation, the file structure maintains proper permissions:
-
-- **Application files**: Owned by `pocketcloud` user
-- **Setup scripts**: Executable by root
-- **Management tools**: Executable by user and root
-- **Configuration**: Protected system files
-- **Data/Storage**: Proper user isolation and encryption
-
-This structure provides a clean, maintainable, and user-friendly organization for the PocketCloud project.
+This structure provides a solid foundation for PocketCloud's continued development and maintenance.

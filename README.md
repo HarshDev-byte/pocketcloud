@@ -262,10 +262,10 @@ sudo fsck /dev/sda1
 bash tools/system-status.sh
 
 # Check file integrity
-npm run check:integrity
+npm run check:integrity --workspace=backend
 
 # Scan for corruption
-npm run scan:corruption
+npm run scan:corruption --workspace=backend
 
 # Service status
 sudo systemctl status pocketcloud
@@ -280,7 +280,7 @@ sudo bash tools/backup-pocketcloud.sh
 git pull origin master
 
 # Clean up corrupted files
-npm run cleanup:corrupted
+npm run cleanup:corrupted --workspace=backend
 
 # Restart service
 sudo systemctl restart pocketcloud
