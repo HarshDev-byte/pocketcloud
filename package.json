@@ -9,6 +9,8 @@
   ],
   "scripts": {
     "start": "./start-pocketcloud.sh",
+    "server": "./run-server.sh",
+    "quick": "./start-server.sh",
     "start:backend": "npm run start --workspace=backend",
     "start:frontend": "npm run dev --workspace=frontend",
     "build": "npm run build --workspace=frontend",
