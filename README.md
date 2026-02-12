@@ -50,22 +50,60 @@ A production-grade, offline-first personal cloud storage system designed for Ras
 ./start-pocketcloud.sh
 ```
 
-### **🪟 Windows 10/11 - Simple Setup**
+### **🪟 Windows 10/11 - One-Command Setup**
 ```cmd
-# Download, setup, and run on Windows
-windows-setup.bat
-start-pocketcloud-windows.bat E:
+# Complete automated setup (installs Node.js, Git, everything!)
+setup-pocketcloud-windows.bat
+
+# OR quick setup (if Node.js & Git already installed)
+quick-setup-windows.bat
+
+# OR one-liner (advanced users)
+install-pocketcloud.bat E:
 ```
-Replace `E:` with your USB drive letter.
 
 **Access your cloud:** `http://localhost:3000`
 
+## 🚀 Windows Automation Features
+
+### **One-Command Complete Setup**
+The `setup-pocketcloud-windows.bat` script provides fully automated installation:
+
+✅ **Automatic software installation** - Downloads and installs Node.js 20 LTS and Git  
+✅ **System requirements check** - Validates Windows version and architecture  
+✅ **USB drive formatting** - Formats and configures your USB drive automatically  
+✅ **Dependency installation** - Installs all required Node.js packages  
+✅ **Windows Firewall setup** - Configures firewall rules for network access  
+✅ **Desktop shortcuts** - Creates convenient shortcuts for daily use  
+✅ **Automatic startup** - Starts PocketCloud and opens browser  
+
+### **Multiple Setup Options**
+Choose the setup method that fits your comfort level:
+
+| Script | Best For | What It Does |
+|--------|----------|--------------|
+| `setup-pocketcloud-windows.bat` | Complete beginners | Installs everything automatically |
+| `quick-setup-windows.bat` | Users with Node.js/Git | Quick setup with prerequisites |
+| `install-pocketcloud.bat E:` | Advanced users | One-liner installation |
+
 ### **🎯 Alternative Setup Methods**
 
-**Interactive Setup:**
+**Raspberry Pi Interactive Setup:**
 ```bash
 bash setup.sh
 # Choose option 1: Interactive Setup
+```
+
+**Windows Automated Setup Options:**
+```cmd
+# Option 1: Complete automation (recommended for beginners)
+setup-pocketcloud-windows.bat
+
+# Option 2: Quick setup (Node.js & Git required)
+quick-setup-windows.bat  
+
+# Option 3: One-liner (advanced users)
+install-pocketcloud.bat E:
 ```
 
 **Manual Control:**
@@ -226,8 +264,9 @@ sudo fsck /dev/sda1
 ## 📚 Documentation
 
 ### **📖 Setup Guides**
-- **[Complete Setup Guide 2026](docs/COMPLETE_SETUP_GUIDE_2026.md)** - Ultra-detailed walkthrough with shopping list
-- **[Windows Setup Guide](WINDOWS_SETUP_GUIDE.md)** - Complete Windows 10/11 setup instructions
+- **[Complete Windows Setup 2026](docs/COMPLETE_WINDOWS_SETUP_2026.md)** - Detailed Windows 10/11 setup with automation scripts
+- **[Complete Setup Guide 2026](docs/COMPLETE_SETUP_GUIDE_2026.md)** - Ultra-detailed Raspberry Pi walkthrough with shopping list
+- **[Windows Setup Guide](WINDOWS_SETUP_GUIDE.md)** - Basic Windows setup instructions
 - **[Pre-Setup Checklist](docs/PRE_SETUP_CHECKLIST.md)** - What to buy and prepare (printable)
 - **[Visual Setup Guide](docs/VISUAL_SETUP_GUIDE.md)** - ASCII diagrams and visual instructions
 - **[Quick Start](docs/QUICKSTART.txt)** - Brief instructions for experienced users
